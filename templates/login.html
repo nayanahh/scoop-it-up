@@ -185,6 +185,12 @@
 
         <form method="post">
             {% csrf_token %}
+            {% if next %}
+                <input type="hidden" name="next" value="{{ next }}">
+            {% elif request.GET.next %}
+                {# fallback if view didn't pass context explicitly #}
+                <input type="hidden" name="next" value="{{ request.GET.next }}">
+            {% endif %}
             
             <div class="form-group">
                 <label for="username">User Identification</label>

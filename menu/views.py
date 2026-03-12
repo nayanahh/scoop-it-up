@@ -5,7 +5,9 @@ from .models import Category, Food
 # ========================================
 # HOME VIEW - Displays all food items
 # ========================================
-@login_required(login_url='login')  # Only logged-in users can access
+# expose the menu publicly so visitors can browse without logging in
+# note that cart/checkout are still protected further down
+
 def home(request):
     categories = Category.objects.all()
     foods = Food.objects.all()
@@ -18,7 +20,8 @@ def home(request):
 # ========================================
 # OPTIONAL: Filter foods by category
 # ========================================
-@login_required(login_url='login')
+# likewise this filter is available without authentication
+
 def category_foods(request, category_id):
     categories = Category.objects.all()
     foods = Food.objects.filter(category_id=category_id)
