@@ -1,0 +1,314 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Quicksand:wght@300;500;700&display=swap" rel="stylesheet">
+
+<style>
+    :root {
+        --cream-light: #fffdf9;
+        --cocoa-dark: #3d2b1f;
+        --berry-accent: #d44d5c;
+        --border-soft: rgba(61, 43, 31, 0.08);
+        --smooth-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .cart-wrapper {
+        max-width: 900px;
+        margin: 60px auto;
+        padding: 0 20px;
+        font-family: 'Quicksand', sans-serif;
+    }
+
+    /* --- Animations --- */
+    @keyframes itemEntry {
+        from { opacity: 0; transform: translateX(-20px); }
+        to { opacity: 1; transform: translateX(0); }
+    }
+
+    .cart-header {
+        text-align: center;
+        margin-bottom: 50px;
+        animation: fadeInUp 0.8s ease-out;
+    }
+
+    .cart-header h2 {
+        font-family: 'Fredoka One', cursive;
+        font-size: 3.5rem;
+        color: var(--cocoa-dark);
+        margin-top: 10px;
+    }
+
+    .cart-header p {
+        text-transform: uppercase;
+        letter-spacing: 5px;
+        font-size: 0.75rem;
+        color: var(--berry-accent);
+        font-weight: 700;
+        margin: 0;
+    }
+
+    /* --- Cart Items Container --- */
+    .cart-container {
+        background: white;
+        border-radius: 40px;
+        padding: 40px;
+        box-shadow: 0 40px 100px rgba(61, 43, 31, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        transition: transform 0.4s ease;
+    }
+
+    .cart-container:hover {
+        transform: translateY(-5px);
+    }
+
+    .cart-item {
+        display: grid;
+        grid-template-columns: 100px 1fr auto;
+        gap: 25px;
+        align-items: center;
+        padding: 30px 0;
+        border-bottom: 1px solid var(--border-soft);
+        opacity: 0; /* Handled by animation */
+        animation: itemEntry 0.6s ease-out forwards;
+    }
+
+    /* Staggered delay for items */
+    .cart-item:nth-child(1) { animation-delay: 0.1s; }
+    .cart-item:nth-child(2) { animation-delay: 0.2s; }
+    .cart-item:nth-child(3) { animation-delay: 0.3s; }
+    .cart-item:nth-child(n+4) { animation-delay: 0.4s; }
+
+    .cart-item:last-child { border-bottom: none; }
+
+    .item-image {
+        width: 100px;
+        height: 100px;
+        border-radius: 25px;
+        object-fit: cover;
+        background-color: var(--cream-light);
+        transition: transform 0.4s var(--smooth-bounce);
+    }
+
+    .cart-item:hover .item-image {
+        transform: scale(1.1) rotate(-3deg);
+    }
+
+    .item-details h5 {
+        font-family: 'Fredoka One', cursive;
+        font-size: 1.6rem;
+        margin-bottom: 8px;
+        color: var(--cocoa-dark);
+    }
+
+    .item-details p {
+        font-size: 0.95rem;
+        color: #8E847D;
+        margin-bottom: 0;
+    }
+
+    .qty-pill {
+        background: var(--cream-light);
+        color: var(--cocoa-dark);
+        border: 1px solid var(--border-soft);
+        padding: 4px 12px;
+        border-radius: 50px;
+        font-size: 0.75rem;
+        font-weight: 700;
+    }
+
+    .quantity-controls {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: var(--cream-light);
+        border: 1px solid var(--border-soft);
+        border-radius: 50px;
+        padding: 4px;
+    }
+
+    .qty-btn {
+        background: var(--berry-accent);
+        color: white;
+        border: none;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        font-size: 14px;
+        font-weight: bold;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+    }
+
+    .qty-btn:hover {
+        background: var(--cocoa-dark);
+        transform: scale(1.1);
+    }
+
+    .qty-input {
+        width: 40px;
+        text-align: center;
+        border: none;
+        background: transparent;
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: var(--cocoa-dark);
+    }
+
+    .qty-input:focus {
+        outline: none;
+    }
+
+    .item-pricing {
+        text-align: right;
+    }
+
+    .price-main {
+        font-family: 'Fredoka One', cursive;
+        font-size: 1.4rem;
+        color: var(--cocoa-dark);
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .remove-link {
+        color: #BBB;
+        font-size: 0.7rem;
+        text-decoration: none;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        font-weight: 800;
+        transition: 0.3s;
+    }
+
+    .remove-link:hover { color: var(--berry-accent); }
+
+    /* --- Summary Footer --- */
+    .cart-footer {
+        margin-top: 40px;
+        padding: 35px 45px;
+        background: var(--cocoa-dark);
+        border-radius: 35px;
+        color: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 20px 40px rgba(61, 43, 31, 0.2);
+        animation: fadeInUp 0.8s ease-out 0.5s backwards;
+    }
+
+    .total-label { 
+        font-size: 0.8rem; 
+        opacity: 0.6; 
+        text-transform: uppercase; 
+        letter-spacing: 3px; 
+        font-weight: 700;
+    }
+
+    .total-amount { 
+        font-family: 'Fredoka One', cursive; 
+        font-size: 2.8rem; 
+        line-height: 1;
+        margin-top: 5px;
+    }
+
+    .btn-checkout {
+        background: white;
+        color: var(--cocoa-dark);
+        padding: 18px 45px;
+        border-radius: 100px;
+        font-weight: 800;
+        text-decoration: none;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-size: 0.85rem;
+        transition: all 0.4s var(--smooth-bounce);
+        position: relative;
+        overflow: hidden;
+    }
+
+    /* Shine effect for checkout button */
+    .btn-checkout::after {
+        content: '';
+        position: absolute;
+        top: 0; left: -100%;
+        width: 100%; height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+        transition: 0.5s;
+    }
+
+    .btn-checkout:hover {
+        background: var(--berry-accent);
+        color: white;
+        transform: scale(1.05) translateY(-2px);
+    }
+
+    .btn-checkout:hover::after {
+        left: 100%;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 120px 0;
+        animation: fadeInUp 1s ease-out;
+    }
+</style>
+
+<div class="cart-wrapper">
+    <header class="cart-header">
+        <p>Your Artisan Selection</p>
+        <h2>The Bowl</h2>
+    </header>
+
+    {% if items %}
+    <div class="cart-container">
+        {% for item in items %}
+        <div class="cart-item">
+            {% if item.food.image %}
+                <img src="{{ item.food.image.url }}" class="item-image" alt="{{ item.food.name }}">
+            {% else %}
+                <img src="{% static 'images/default-scoop.jpg' %}" class="item-image" alt="Ice Cream">
+            {% endif %}
+
+            <div class="item-details">
+                <h5>{{ item.food.name }}</h5>
+                <p>{{ item.food.description|truncatechars:60 }}</p>
+                <div class="mt-2">
+                    <form method="post" action="{% url 'update_cart_quantity' item.id %}" class="quantity-controls" style="display: inline-flex;">
+                        {% csrf_token %}
+                        <button type="submit" name="action" value="decrease" class="qty-btn">-</button>
+                        <input type="number" id="qty-{{ item.id }}" name="quantity" value="{{ item.quantity }}" min="1" class="qty-input" onchange="this.form.submit()">
+                        <button type="submit" name="action" value="increase" class="qty-btn">+</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="item-pricing">
+                <span class="price-main">₹{{ item.total_price }}</span>
+                <a href="{% url 'remove_from_cart' item.id %}" class="remove-link">Remove</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="cart-footer">
+        <div>
+            <span class="total-label">Grand Total</span>
+            <div class="total-amount">₹{{ total }}</div>
+        </div>
+        <a href="{% url 'checkout' %}" class="btn-checkout">Checkout Now</a>
+    </div>
+
+    {% else %}
+    <div class="empty-state">
+        <div class="ice-cream-float" style="font-size: 6rem; margin-bottom: 30px;">🍦</div>
+        <h3 class="mb-4" style="font-family: 'Fredoka One'; font-size: 2.5rem; color: var(--cocoa-dark);">Your bowl is empty.</h3>
+        <p class="text-muted mb-5" style="font-size: 1.1rem;">Fresh flavors are waiting to be churned.</p>
+        <a href="{% url 'home' %}" class="btn btn-dark rounded-pill px-5 py-3 fw-bold text-uppercase" style="letter-spacing: 2px; font-size: 0.8rem;">Start Scooping</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

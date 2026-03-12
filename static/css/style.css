@@ -1,0 +1,99 @@
+/* General */
+body {
+    background-color: #f8f9fa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+a {
+    text-decoration: none;
+}
+
+/* Navbar */
+.navbar-brand {
+    font-size: 1.5rem;
+}
+
+.nav-link {
+    font-size: 1rem;
+}
+
+/* Cards */
+.card {
+    border-radius: 10px;
+}
+
+.card img {
+    height: 200px;
+    object-fit: cover;
+}
+
+/* Buttons */
+.btn {
+    border-radius: 30px;
+}
+
+/* Forms */
+form label {
+    font-weight: 600;
+}
+
+/* Cart */
+.cart-img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+}
+
+/* Footer (optional) */
+footer {
+    background: #212529;
+    color: #fff;
+    padding: 15px 0;
+    margin-top: 50px;
+    text-align: center;
+}
+.category-filter {
+    margin-bottom: 20px;
+}
+
+.category-filter a {
+    text-decoration: none;
+    color: #198754;
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+.food-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.food-card {
+    background: #fff;
+    padding: 10px;
+    border-radius: 8px;
+    width: 220px;
+    text-align: center;
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+}
+
+.food-card img {
+    width: 100%;
+    height: 100px;
+    object-fit: contain;
+    border-radius: 5px;
+}
+
+.btn-add-cart {
+    background: #198754;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-add-cart:hover {
+    background: #145c33;
+}
